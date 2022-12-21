@@ -1,8 +1,6 @@
 # Introduction
 
-The `FilesystemCollection` class extends the datatype `Collection` class and allows you to have a collection of filesystem objects.
-These objects can be instances of `Directory`, `File`, and `Symlink`.
-If you pass an invalid value to the `FilesystemCollection`, it throws an `InvalidArgumentException`.
+The `FilesystemCollection` class extends the `Collection` datatype class.
 If you use the `ls` or `ls_all` methods on a `Directory` object, the return type will be a `FilesystemCollection`.
 It also gives you access to an API that you can see in the following.
 
@@ -22,7 +20,7 @@ $symlink = Symlink::from_string('/home/user/symlink');
 
 $collection = new FilesystemCollection([$directory, $file, $symlink]);
 $collection->put($new_file);
-$collection->append([$other_file, $new_symlink]);
+$collection->push($other_file)->push($new_symlink);
 $files = $collection->filter(function (Directory|File|Symlink $item) {
     return $item instanceof File;
 });
