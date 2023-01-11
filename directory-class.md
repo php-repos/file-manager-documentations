@@ -60,7 +60,7 @@ echo $project; // Output: /home/user/projects/awesome-project
 $resolved_path = $directory->append('projects/awesome-project/subdirectory/../filename.txt');
 echo $resolved_path; // Output: /home/user/projects/awesome-project/filename.txt
 ```
-
+---
 ### exists
 
 You can use the `exists` method checks if the given directory exists and is a directory.
@@ -79,7 +79,7 @@ $directory = Directory::from_string('/home/user');
 echo (int) $directory->exists(); // Output: 1
 echo (int) $directory->append('not-exists')->exists(); // Output: 0
 ```
-
+---
 ### leaf
 
 You can use the `leaf` method to get the leaf of the directory, that is the name of the directory.
@@ -97,7 +97,7 @@ use Saeghe\FileManager\Filesystem\Directory;
 echo Directory::from_string('/')->leaf(); // Output: '/'
 echo Directory::from_string('/home/user/project')->leaf(); // Output: 'project' 
 ```
-
+---
 ### parent
 
 The `parent` method returns an instance of the `Directory` class from the current path's parent directory.
@@ -113,7 +113,7 @@ use Saeghe\FileManager\Filesystem\Directory;
 
 echo Path::from_string('/home/user/project')->parent(); // Output: '/home/user' 
 ```
-
+---
 ### relocate
 
 The `relocate` method returns a new `Path` instance by replacing the given origin with the given destination.
@@ -131,7 +131,7 @@ $directory = Directory::from_string('/home/user/directory/subdirectory');
 $relocate = $directory->relocate('/home/user/directory', '/home/user2/directory/../another-directory');
 echo $relocate; // Output: '/home/user2/another-directory/subdirectory' 
 ```
-
+---
 ### sibling
 
 The `sibling` method returns a new `Path` of the given path base on the path parent directory.
@@ -149,7 +149,30 @@ $directory = Directory::from_string('/home/user/directory/filename');
 echo $sibling_directory = $directory->sibling('subdirectory'); // Output: /home/user/directory/subdirectory
 echo $sibling_filename = $directory->sibling('other-file.extension'); // Output: /home/user/directory/other-file.extension
 ```
+---
+### clean
 
+You can use the `clean` method to delete objects in a directory recursively.
+
+```php
+public function exists(): bool
+```
+
+#### Example
+
+```php
+use Saeghe\FileManager\Filesystem\Directory;
+
+$directory = Directory::from_string(root() . 'MainDirectory');
+$directory->file('file.txt')->create('test content');
+$directory->subdirectory('Subdirectories')->make_recursive();
+$directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->make_recursive();
+$directory->subdirectory('Subdirectories')->file('file.txt')->create('test content');
+$directory->clean();
+assert_true($directory->exists());
+assert_true($directory->ls_all()->items() === []);
+```
+---
 ### chmod
 
 The `chmod` method sets the given permission as permission for the directory.
@@ -167,7 +190,7 @@ $directory = Directory::from_string('/home/user/directory');
 $directory->chmod(0777);
 echo $directory->permission(); // Output: 0777
 ```
-
+---
 ### delete
 
 The `delete` method tries to delete the directory.
@@ -186,7 +209,7 @@ echo (int) $directory->exists(); // Output: 1
 $directory->delete();
 echo (int) $directory->exists(); // Output: 0
 ```
-
+---
 ### delete_recursive
 
 The `delete_recursive` method deletes the directory recursively.
@@ -205,7 +228,7 @@ $directory = Directory::from_string('/home/user/directory');
 $directory->delete_recursive();
 echo (int) $directory->exists(); // Output: 0
 ```
-
+---
 ### exists_or_create
 
 The `exists_or_create` method checks to see if the directory exists.
@@ -228,7 +251,7 @@ echo (int) $directory->exists(); // Output: 1
 $directory->exists_or_create();
 echo (int) $directory->exists(); // Output: 1
 ```
-
+---
 ### file
 
 The `file` method returns a new `File` instance of the given path under the directory.
@@ -250,7 +273,7 @@ $file = $directory->file('filename')
 echo (int) $file instanceof File; // Output: 1
 echo $file; // Output: '/home/user/directory/filename'
 ```
-
+---
 ### item
 
 The `item` method checks the given path.
@@ -282,7 +305,7 @@ echo (int) $symlink instanceof Symlink; // Output: 1
 $file = $directory->item('file');
 echo (int) $file instanceof File; // Output: 1
 ```
-
+---
 ### ls
 
 The `ls` method returns a `FilesystemCollection` list of contents.
@@ -305,7 +328,7 @@ foreach ($collection as $item) {
     $item->exists();
 }
 ```
-
+---
 ### ls_all
 
 The `ls_all` method returns a `FilesystemCollection` list of contents, include the hidden ones.
@@ -328,7 +351,7 @@ foreach ($collection as $item) {
     $item->exists();
 }
 ```
-
+---
 ### make
 
 The `make` method makes the directory on the filesystem.
@@ -350,7 +373,7 @@ $directory->make(0777);
 echo (int) $directory->exists(); // Output: 1
 echo $directory->permission(); // Output: 0777
 ```
-
+---
 ### make_recursive
 
 The `make_recursive` method makes the directory recursively on the filesystem.
@@ -374,7 +397,7 @@ echo (int) $directory->parent()->exists(); // Output: 1
 echo (int) $directory->exists(); // Output: 1
 echo $directory->permission(); // Output: 0777
 ```
-
+---
 ### permission
 
 The `permission` returns the directory's permission.
@@ -396,7 +419,7 @@ $directory = Directory::from_string('/home/user/another-directory');
 $directory->make(0755);
 echo $directory->permission(); // Output: 0755
 ```
-
+---
 ### preserve_copy
 
 It preserves the permission from the given origin and makes the given destination directory with the same permission.
@@ -416,7 +439,76 @@ $directory->make(0777);
 $other_directory = $directory->preserve_copy('/root/home/user/project2/directory'); 
 echo $other_directory->permission(); // Output 0777
 ```
+---
+### recursively
 
+The `recursively` method return a FilesystemTree of the directory and its objects recursively.
+
+> **Note**
+> For more information on the `FilesystemTree` class, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/filesystem-tree-class)
+
+```php
+public function recursively(): FilesystemTree
+```
+
+#### Example
+
+```php
+use Saeghe\FileManager\Filesystem\Directory;
+
+$directory = Directory::from_string(root() . 'PlayGround');
+$directory->file('.hidden')->create('');
+$directory->subdirectory('Subdirectories')->make_recursive();
+$directory->subdirectory('Subdirectories')->file('file1.txt')->create('');
+$directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->make_recursive();
+$directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->symlink('symlink1')
+    ->link($directory->subdirectory('Subdirectories')->file('file1.txt'));
+$directory->subdirectory('Subdirectories')->subdirectory('subdirectory2')->make_recursive();
+$directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->subdirectory('subdirectory3')->make_recursive();
+$directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->subdirectory('subdirectory3')->file('file2.txt')->create('');
+$directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->subdirectory('subdirectory3')->symlink('symlink2')
+    ->link($directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->subdirectory('subdirectory3')->file('file2.txt'));
+    
+$results = $directory->recursively();
+
+assert_true([
+    $directory,
+    $directory->file('.hidden'),
+    $directory->subdirectory('Subdirectories'),
+    $directory->subdirectory('Subdirectories')->file('file1.txt'),
+    $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1'),
+    $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->subdirectory('subdirectory3'),
+    $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->subdirectory('subdirectory3')->file('file2.txt'),
+    $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->subdirectory('subdirectory3')->symlink('symlink2'),
+    $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->symlink('symlink1'),
+    $directory->subdirectory('Subdirectories')->subdirectory('subdirectory2'),
+] == $results->vertices()->items());
+
+assert_true([
+    new Pair($directory, $directory->file('.hidden')),
+    new Pair($directory, $directory->subdirectory('Subdirectories')),
+    new Pair($directory->subdirectory('Subdirectories'), $directory->subdirectory('Subdirectories')->file('file1.txt')),
+    new Pair($directory->subdirectory('Subdirectories'), $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')),
+    new Pair(
+        $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1'),
+        $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->subdirectory('subdirectory3')
+    ),
+    new Pair(
+        $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->subdirectory('subdirectory3'),
+        $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->subdirectory('subdirectory3')->file('file2.txt')
+    ),
+    new Pair(
+        $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->subdirectory('subdirectory3'),
+        $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->subdirectory('subdirectory3')->symlink('symlink2')
+    ),
+    new Pair(
+        $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1'),
+        $directory->subdirectory('Subdirectories')->subdirectory('subdirectory1')->symlink('symlink1')
+    ),
+    new Pair($directory->subdirectory('Subdirectories'), $directory->subdirectory('Subdirectories')->subdirectory('subdirectory2')),
+] == $results->edges()->items());
+```
+---
 ### renew
 
 It makes the directory if does not exist.
@@ -439,7 +531,7 @@ File\create('/root/home/user/project/directory/file.txt');
 $directory->renew();
 echo (int) File\exists('/root/home/user/project/directory/file.txt'); // Output 0
 ```
-
+---
 ### renew_recursive
 
 It makes the directory recursively if not exists.
@@ -464,7 +556,7 @@ File\create('/root/home/user/project/directory/subdirectory/file.txt');
 $directory->renew_recursive();
 echo (int) File\exists('/root/home/user/project/directory/subdirectory/file.txt'); // Output 0
 ```
-
+---
 ### subdirectory
 
 It returns a new instance of the subdirectory base on the current directory.
@@ -482,7 +574,7 @@ $directory = Directory::from_string('/root/home/user/directory');
 $result = $directory->subdirectory('Subdirectory');
 echo $result; // Output: '/root/home/user/directory/Subdirectory'
 ```
-
+---
 ### symlink
 
 The `symlink` method returns a new `Symlink` instance of the given path under the directory.
@@ -504,3 +596,4 @@ $symlink = $directory->symlink('symlink')
 echo (int) $symlink instanceof Symlink; // Output: 1
 echo $symlink; // Output: '/home/user/directory/symlink'
 ```
+---

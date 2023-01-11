@@ -25,7 +25,7 @@ echo $filename->string(); // Output: '.filename'
 
 ## Methods
 
-Here you can see a list of the available methods on the collection:
+Here you can see a list of the available methods on the filename:
 
 ---
 ### directory
