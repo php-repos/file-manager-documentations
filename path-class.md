@@ -1,18 +1,18 @@
 # Introduction
 
 The `Path` class extends Datatype `Text` abstract class.
-You can use it to keep any path as a string and make sure the path has been validated.
+You can use it to keep any path as a string and use its useful methods.
 It also gives you access to an API that you can see in the following.
 
 > **Note**
-> For more information on the `Text` class, please read [its documentation](https://saeghe.com/packages/datatype/documentations/text-class)
+> For more information on the `Text` class, please read [its documentation](https://phpkg.com/packages/datatype/documentations/text-class)
 
 ## Usage
 
 You can make a new `Path` instance and use it like so:
 
 ```php
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Path;
 
 $path = Path::from_string('/root/home/user');
 echo $path; // Output: '/root/home/user'
@@ -23,8 +23,11 @@ echo $path; // Output: '/root/home/user'
 
 The `Path` class resolves the given string by using the `Resolver\realpath` function.
 
+> **Note**
+> For more information on the `Resolver` functions, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/resolver-functions)
+
 ```php
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Path;
 
 $path = Path::from_string('/root/home/user/../project');
 echo $path; // Output: '/root/home/project'
@@ -47,7 +50,7 @@ public function append(string $path): Path
 #### Example
 
 ```php
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Path;
 
 $path = Path::from_string('/home/user');
 
@@ -69,7 +72,7 @@ public function exists(): bool
 #### Example
 
 ```php
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Path;
 
 $path = Path::from_string('/home/user');
 
@@ -89,7 +92,7 @@ public function leaf(): string
 #### Example
 
 ```php
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Path;
 
 echo Path::from_string('/')->leaf(); // Output: '/'
 echo Path::from_string('/home/user/project')->leaf(); // Output: 'project'
@@ -101,7 +104,7 @@ echo Path::from_string('/home/user/project/filename.txt')->leaf(); // Output: 'f
 The `parent` method returns an instance of the `Directory` class from the current path's parent directory.
 
 > **Note**
-> For more information on the `Directory` class, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/directory-class)
+> For more information on the `Directory` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/directory-class)
 
 ```php
 public function parent(): Directory
@@ -110,7 +113,7 @@ public function parent(): Directory
 #### Example
 
 ```php
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Path;
 
 echo Path::from_string('/home/user/project')->parent(); // Output: '/home/user'
 echo Path::from_string('/home/user/project/filename.txt')->parent(); // Output: '/home/user/project' 
@@ -127,7 +130,7 @@ public function relocate(string $origin, string $destination): Path
 #### Example
 
 ```php
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Path;
 
 $path = new Path('/home/user/directory/filename');
 $relocate = $path->relocate('/home/user/directory', '/home/user2/directory/../another-directory');
@@ -145,7 +148,7 @@ public function sibling(string $path): Path
 #### Example
 
 ```php
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Path;
 
 $path = new Path('/home/user/directory/filename');
 echo $sibling_directory = $path->sibling('subdirectory'); // Output: /home/user/directory/subdirectory
@@ -157,7 +160,7 @@ echo $sibling_filename = $path->sibling('other-file.extension'); // Output: /hom
 The `as_file` method returns a new `File` instance of the path.
 
 > **Note**
-> For more information on the `File` class, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/file-class)
+> For more information on the `File` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/file-class)
 
 ```php
 public function as_file(): File
@@ -166,7 +169,7 @@ public function as_file(): File
 #### Example
 
 ```php
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Path;
 
 $path = new Path('/home/user/directory/filename');
 $file = $path->as_file();
@@ -180,7 +183,7 @@ echo $file; // Output: '/home/user/directory/filename'
 The `as_directory` method returns a new `Directory` instance of the path.
 
 > **Note**
-> For more information on the `Directory` class, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/directory-class)
+> For more information on the `Directory` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/directory-class)
 
 ```php
 public function as_directory(): Directory
@@ -189,7 +192,7 @@ public function as_directory(): Directory
 #### Example
 
 ```php
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Path;
 
 $path = new Path('/home/user/directory/subdirectory');
 $subdirectory = $path->as_directory();
@@ -203,7 +206,7 @@ echo $subdirectory; // Output: '/home/user/directory/subdirectory'
 The `as_symlink` method returns a new `Symlink` instance of the path.
 
 > **Note**
-> For more information on the `Symlink` class, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/symlink-class)
+> For more information on the `Symlink` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/symlink-class)
 
 ```php
 public function as_symlink(): Symlink
@@ -212,7 +215,7 @@ public function as_symlink(): Symlink
 #### Example
 
 ```php
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Path;
 
 $path = new Path('/home/user/directory/symlink');
 $symlink = $path->as_symlink();

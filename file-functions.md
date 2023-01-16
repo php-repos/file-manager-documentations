@@ -1,6 +1,6 @@
 # Introduction
 
-The `File` namespace is part of the FileManager package.
+The `File` namespace in the `FileManager` package provides a set of functions to perform operations on files.
 Here you can see a list of included functions and their documentation.
 
 ## chmod
@@ -13,7 +13,7 @@ function chmod(string $path, int $permission): bool
 
 ### Definition
 
-It changes the file's permission.
+The `chmod` function changes the permissions of a file or directory at the specified path.
 
 > **Note**
 > PHP's `umask` does not have any effect on this function.
@@ -21,7 +21,7 @@ It changes the file's permission.
 ### Examples
 
 ```php
-use function Saeghe\FileManager\File\chmod;
+use function PhpRepos\FileManager\File\chmod;
 
 chmod($filepath, 0666); // drw-rw-rw-
 chmod($filepath, 0600); // drw-------
@@ -38,13 +38,13 @@ function content(string $path): string
 
 ### Definition
 
-It returns the content of the file as a string.
+The `content` function returns the content of a file at the specified path.
 It equals `cat path`.
 
 ### Examples
 
 ```php
-use function Saeghe\FileManager\File\content;
+use function PhpRepos\FileManager\File\content;
 
 content('/path-to-file');
 ```
@@ -65,7 +65,7 @@ It equals to `cp origin destination`.
 ### Examples
 
 ```php
-use function Saeghe\FileManager\File\copy;
+use function PhpRepos\FileManager\File\copy;
 
 copy('/path-to-origin', '/path-to-destination');
 ```
@@ -86,7 +86,7 @@ The permission of the file sets as the given permission, if not passed, the perm
 ### Examples
 
 ```php
-use function Saeghe\FileManager\File\create;
+use function PhpRepos\FileManager\File\create;
 
 create('/path-to-file', 'hello world', 0666);
 ```
@@ -102,12 +102,12 @@ function delete(string $path): bool
 ### Definition
 
 It deletes the file in the given path.
-It equals to ` rm path-to-file`.
+It equals to `rm path-to-file`.
 
 ### Examples
 
 ```php
-use function Saeghe\FileManager\File\delete;
+use function PhpRepos\FileManager\File\delete;
 
 delete('/path-to-file');
 ```
@@ -122,13 +122,13 @@ function exists(string $path): bool
 
 ### Definition
 
-It returns true if the given path exists, and it is a file. Otherwise, it returns false.
+It returns `true` if the given path exists, and it is a file. Otherwise, it returns `false`.
 
 ### Examples
 
 ```php
-use function Saeghe\FileManager\File\create;
-use function Saeghe\FileManager\File\exists;
+use function PhpRepos\FileManager\File\create;
+use function PhpRepos\FileManager\File\exists;
 
 echo (int) exists('/path-to-file'); // Output: 0
 create('/path-to-file', '');
@@ -150,8 +150,8 @@ It returns a generator of the file's lines.
 ### Examples
 
 ```php
-use function Saeghe\FileManager\File\create;
-use function Saeghe\FileManager\File\lines;
+use function PhpRepos\FileManager\File\create;
+use function PhpRepos\FileManager\File\lines;
 
 create('path-to-file', 'First line.' . PHP_EOL . 'Second line.');
 $results = [];
@@ -176,9 +176,9 @@ It modifies the content of the file in the given path with the given content.
 ### Examples
 
 ```php
-use function Saeghe\FileManager\File\create;
-use function Saeghe\FileManager\File\content;
-use function Saeghe\FileManager\File\modify;
+use function PhpRepos\FileManager\File\create;
+use function PhpRepos\FileManager\File\content;
+use function PhpRepos\FileManager\File\modify;
 
 create('path-to-file', 'create content');
 modify('path-to-file', 'modified content');
@@ -201,7 +201,7 @@ It equals to `mv origin destination`.
 ### Examples
 
 ```php
-use function Saeghe\FileManager\File\move;
+use function PhpRepos\FileManager\File\move;
 
 move('path-to-file', 'path-to-destination');
 ```
@@ -221,8 +221,8 @@ It returns the file permission.
 ### Examples
 
 ```php
-use function Saeghe\FileManager\File\create;
-use function Saeghe\FileManager\File\permission;
+use function PhpRepos\FileManager\File\create;
+use function PhpRepos\FileManager\File\permission;
  
 create('/root/home/file', '', 0666);
 echo permission('/root/home/file'); // Output 0666
@@ -247,9 +247,9 @@ It equals to `cp -P origin destination`.
 ### Examples
 
 ```php
-use function Saeghe\FileManager\File\create;
-use function Saeghe\FileManager\File\permission;
-use function Saeghe\FileManager\File\preserve_copy;
+use function PhpRepos\FileManager\File\create;
+use function PhpRepos\FileManager\File\permission;
+use function PhpRepos\FileManager\File\preserve_copy;
  
 create('/root/home/file1', '', 0666);
 preserve_copy('/root/home/file1', '/root/home/file2');

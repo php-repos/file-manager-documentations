@@ -1,18 +1,15 @@
 # Introduction
 
-The `File` class extends Datatype `Text` abstract class.
-You can use it to keep any file path as a string and make sure the path has been validated.
+The `File` class represents a file in the file system.
+It implements the `Stringable` interface, which means that it can be used as a string and can be casted to a string.
 It also gives you access to an API that you can see in the following.
-
-> **Note**
-> For more information on the `Text` class, please read [its documentation](https://saeghe.com/packages/datatype/documentations/text-class)
 
 ## Usage
 
 You can make a new `File` instance and use it like so:
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
 $file = File::from_string('/root/home/user/filename.extension');
 echo $file; // Output: '/root/home/user/filename.extension'
@@ -24,8 +21,8 @@ echo $file; // Output: '/root/home/user/filename.extension'
 Or you can use a `Path` instance:
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Path;
 
 $path = Path::from_string('/root/home/user/filename.extension');
 $file = new File($path);
@@ -33,19 +30,19 @@ echo $file; // Output: '/root/home/user/filename.extension'
 ```
 
 > **Note**
-> For more information on the `Path` class, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/path-class)
+> For more information on the `Path` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/path-class)
 
 The `File` class resolves the given string by using the `Resolver\realpath` function.
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
 $file = File::from_string('/root/home/user/../project/file');
 echo $file; // Output: '/root/home/project/file'
 ```
 
 > **Note**
-> For more information on the `Resolver` functions, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/resolver-functions)
+> For more information on the `Resolver` functions, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/resolver-functions)
 
 ## Methods
 
@@ -62,7 +59,7 @@ public function exists(): bool
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
 $file = File::from_string('/home/user/file');
 
@@ -81,10 +78,10 @@ public function leaf(): string
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
-echo Path::from_string('/home/user/filename')->leaf(); // Output: 'filename'
-echo Path::from_string('/home/user/project/filename.txt')->leaf(); // Output: 'filename.txt' 
+echo File::from_string('/home/user/filename')->leaf(); // Output: 'filename'
+echo File::from_string('/home/user/project/filename.txt')->leaf(); // Output: 'filename.txt' 
 ```
 
 ### parent
@@ -92,7 +89,7 @@ echo Path::from_string('/home/user/project/filename.txt')->leaf(); // Output: 'f
 The `parent` method returns an instance of the `Directory` class from the current path's parent directory.
 
 > **Note**
-> For more information on the `Directory` class, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/directory-class)
+> For more information on the `Directory` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/directory-class)
 
 ```php
 public function parent(): Directory
@@ -101,10 +98,10 @@ public function parent(): Directory
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
-echo Path::from_string('/home/user/filename')->parent(); // Output: '/home/user'
-echo Path::from_string('/home/user/project/filename.txt')->parent(); // Output: '/home/user/project' 
+echo File::from_string('/home/user/filename')->parent(); // Output: '/home/user'
+echo File::from_string('/home/user/project/filename.txt')->parent(); // Output: '/home/user/project' 
 ```
 
 ### relocate
@@ -118,9 +115,9 @@ public function relocate(string $origin, string $destination): Path
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
-$file = new Path('/home/user/directory/filename');
+$file = new File('/home/user/directory/filename');
 $relocate = $file->relocate('/home/user/directory', '/home/user2/directory/../another-directory');
 echo $relocate; // Output: '/home/user2/another-directory/filename' 
 ```
@@ -136,9 +133,9 @@ public function sibling(string $file): Path
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
-$file = new Path('/home/user/directory/filename');
+$file = new File('/home/user/directory/filename');
 echo $sibling_directory = $file->sibling('subdirectory'); // Output: /home/user/directory/subdirectory
 echo $sibling_filename = $file->sibling('other-file.extension'); // Output: /home/user/directory/other-file.extension
 ```
@@ -154,7 +151,7 @@ public function chmod(int $permission): self
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
 $file = File::from_string('/home/user/file');
 $file->chmod(0777);
@@ -172,7 +169,7 @@ public function content(): string
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
 $file = File::from_string('/home/user/file');
 $file->create('file content');
@@ -192,7 +189,7 @@ public function create(string $content, int $permission = 0664): self
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
 $file = File::from_string('/home/user/file');
 $file->create('file content');
@@ -216,7 +213,7 @@ public function delete(): self
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
 $file = File::from_string('/home/user/file');
 $file->create('file content');
@@ -236,7 +233,7 @@ public function lines(): \Generator
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
 $file = File::from_string('/home/user/file');
 $file->create('First line.' . PHP_EOL . 'Second line.');
@@ -258,7 +255,7 @@ public function modify(string $content): self
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
 $file = File::from_string('/home/user/file');
 $file->create('create content');
@@ -277,7 +274,7 @@ public function permission(): int
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
 $file = File::from_string('/home/user/file');
 $file->create('file content');
@@ -302,7 +299,7 @@ public function permission(): int
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\File;
+use PhpRepos\FileManager\Filesystem\File;
 
 $file = File::from_string('/home/user/file');
 $file->create('file content');

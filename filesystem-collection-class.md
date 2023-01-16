@@ -5,14 +5,14 @@ If you use the `ls` or `ls_all` methods on a `Directory` object, the return type
 It also gives you access to an API that you can see in the following.
 
 > **Note**
-> For more information on the `Collection` class, please read [its documentation](https://saeghe.com/packages/datatype/documentations/collection-class)
+> For more information on the `Collection` class, please read [its documentation](https://phpkg.com/packages/datatype/documentations/collection-class)
 
 ## Usage
 
 You can use the constructor to make a new `FilesystemCollection`.
 
 ```php
-use Saeghe\FileManager\Filesystem\FilesystemCollection;
+use PhpRepos\FileManager\Filesystem\FilesystemCollection;
 
 $directory = Directory::from_string('/home/user');
 $file = File::from_string('/home/user/file');
@@ -28,9 +28,12 @@ $files = $collection->filter(function (Directory|File|Symlink $item) {
 
 When you use the `ls` or `ls_all` methods on the `Directory` class, the return type is a `FilesystemCollection`:
 
+> **Note**
+> For more information on the `Directory` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/directory-class)
+
 ```php
-use Saeghe\FileManager\Filesystem\FilesystemCollection;
-use Saeghe\FileManager\Filesystem\Directory;
+use PhpRepos\FileManager\Filesystem\FilesystemCollection;
+use PhpRepos\FileManager\Filesystem\Directory;
 
 $directory = Directory::from_string('/home/user');
 

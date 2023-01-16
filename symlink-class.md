@@ -1,31 +1,28 @@
 # Introduction
 
-The `Symlink` class extends Datatype `Text` abstract class.
-You can use it to keep any file path as a string and make sure the path has been validated.
+The `Symlink` class represents a symlink in the file system.
+It implements the `Stringable` interface, which means that it can be used as a string and can be casted to a string.
 It also gives you access to an API that you can see in the following.
-
-> **Note**
-> For more information on the `Text` class, please read [its documentation](https://saeghe.com/packages/datatype/documentations/text-class)
 
 ## Usage
 
 You can make a new `Symlink` instance and use it like so:
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
+use PhpRepos\FileManager\Filesystem\Symlink;
 
 $symlink = Symlink::from_string('/root/home/user/symlink');
 echo $symlink; // Output: '/root/home/user/symlink'
 
-$symlink = new Path('/root/home/user/symlink');
+$symlink = new Symlink('/root/home/user/symlink');
 echo $symlink; // Output: '/root/home/user/symlink'
 ```
 
 Or you can use a `Path` instance:
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
-use Saeghe\FileManager\Path;
+use PhpRepos\FileManager\Filesystem\Symlink;
+use PhpRepos\FileManager\Path;
 
 $path = Path::from_string('/root/home/user/symlink');
 $symlink = new Symlink($path);
@@ -33,19 +30,19 @@ echo $symlink; // Output: '/root/home/user/symlink'
 ```
 
 > **Note**
-> For more information on the `Path` class, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/path-class)
+> For more information on the `Path` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/path-class)
 
 The `Symlink` class resolves the given string by using the `Resolver\realpath` function.
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
+use PhpRepos\FileManager\Filesystem\Symlink;
 
 $symlink = Symlink::from_string('/root/home/user/../project/symlink');
 echo $symlink; // Output: '/root/home/project/symlink'
 ```
 
 > **Note**
-> For more information on the `Resolver` functions, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/resolver-functions)
+> For more information on the `Resolver` functions, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/resolver-functions)
 
 ## Methods
 
@@ -62,7 +59,7 @@ public function exists(): bool
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
+use PhpRepos\FileManager\Filesystem\Symlink;
 
 $symlink = Symlink::from_string('/home/user/symlink');
 
@@ -81,10 +78,10 @@ public function leaf(): string
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
+use Phprepos\FileManager\Filesystem\Symlink;
 
-echo Path::from_string('/home/user/project')->leaf(); // Output: 'project'
-echo Path::from_string('/home/user/project/filename.txt')->leaf(); // Output: 'filename.txt' 
+echo Symlink::from_string('/home/user/project')->leaf(); // Output: 'project'
+echo Symlink::from_string('/home/user/project/filename.txt')->leaf(); // Output: 'filename.txt' 
 ```
 
 ### parent
@@ -92,7 +89,7 @@ echo Path::from_string('/home/user/project/filename.txt')->leaf(); // Output: 'f
 The `parent` method returns an instance of the `Directory` class from the current path's parent directory.
 
 > **Note**
-> For more information on the `Directory` class, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/directory-class)
+> For more information on the `Directory` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/directory-class)
 
 ```php
 public function parent(): Directory
@@ -101,10 +98,10 @@ public function parent(): Directory
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
+use PhpRepos\FileManager\Filesystem\Symlink;
 
-echo Path::from_string('/home/user/symlink')->parent(); // Output: '/home/user'
-echo Path::from_string('/home/user/project/symlink')->parent(); // Output: '/home/user/project' 
+echo Symlink::from_string('/home/user/symlink')->parent(); // Output: '/home/user'
+echo Symlink::from_string('/home/user/project/symlink')->parent(); // Output: '/home/user/project' 
 ```
 
 ### relocate
@@ -118,9 +115,9 @@ public function relocate(string $origin, string $destination): Path
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
+use PhpRepos\FileManager\Filesystem\Symlink;
 
-$symlink = new Path('/home/user/directory/symlink');
+$symlink = new Symlink('/home/user/directory/symlink');
 $relocate = $symlink->relocate('/home/user/directory', '/home/user2/directory/../another-directory');
 echo $relocate; // Output: '/home/user2/another-directory/symlink' 
 ```
@@ -136,9 +133,9 @@ public function sibling(string $symlink): Path
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
+use PhpRepos\FileManager\Filesystem\Symlink;
 
-$symlink = new Path('/home/user/directory/symlink');
+$symlink = new Symlink('/home/user/directory/symlink');
 echo $sibling_directory = $symlink->sibling('subdirectory'); // Output: /home/user/directory/subdirectory
 echo $sibling_filename = $symlink->sibling('other-file.extension'); // Output: /home/user/directory/other-file.extension
 ```
@@ -154,9 +151,9 @@ public function delete(): self
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
+use PhpRepos\FileManager\Filesystem\Symlink;
 
-$symlink = new Path('/home/user/directory/symlink');
+$symlink = new Symlink('/home/user/directory/symlink');
 echo (int) $symlink->exists(); // Output: 1
 $symlink->delete();
 echo (int) $symlink->exists(); // Output: 0
@@ -174,9 +171,9 @@ public function exists(): bool
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
+use PhpRepos\FileManager\Filesystem\Symlink;
 
-$symlink = new Path('/home/user/directory/symlink');
+$symlink = new Symlink('/home/user/directory/symlink');
 echo (int) $symlink->exists(); // Output: 0
 $symlink->link(File::from_string('/home/user/file'));
 echo (int) $symlink->exists(); // Output: 1
@@ -193,9 +190,9 @@ public function link(File $file): self
 #### Example
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
+use PhpRepos\FileManager\Filesystem\Symlink;
 
-$symlink = new Path('/home/user/directory/symlink');
+$symlink = new Symlink('/home/user/directory/symlink');
 echo (int) $symlink->exists(); // Output: 0
 $symlink->link(File::from_string('/home/user/file'));
 echo (int) $symlink->exists(); // Output: 1

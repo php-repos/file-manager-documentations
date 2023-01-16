@@ -1,202 +1,105 @@
 # Introduction
 
-The `Symlink` class extends Datatype `Text` abstract class.
-You can use it to keep any file path as a string and make sure the path has been validated.
+The `Symlink` namespace provides functions to work with symbolic links in the file system.
 It also gives you access to an API that you can see in the following.
 
-> **Note**
-> For more information on the `Text` class, please read [its documentation](https://saeghe.com/packages/datatype/documentations/text-class)
+## delete
 
-## Usage
-
-You can make a new `Symlink` instance and use it like so:
+### Signature
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
-
-$symlink = Symlink::from_string('/root/home/user/symlink');
-echo $symlink; // Output: '/root/home/user/symlink'
-
-$symlink = new Path('/root/home/user/symlink');
-echo $symlink; // Output: '/root/home/user/symlink'
+function delete(string $path): bool
 ```
 
-Or you can use a `Path` instance:
+### Definition
+
+This function deletes the symbolic link specified by path. It returns `true` on success and `false` on failure.
+
+### Examples
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
-use Saeghe\FileManager\Path;
+use function PhpRepos\FileManager\Symlink\delete;
 
-$path = Path::from_string('/root/home/user/symlink');
-$symlink = new Symlink($path);
-echo $symlink; // Output: '/root/home/user/symlink'
+$file = Path::from_string(root() . 'Tests/PlayGround/LinkSource');
+File\create($file, 'file content');
+$link = $file->parent()->append('symlink');
+link($file->as_file(), $link);
+assert_true(delete($link));
+assert_true($file->exists());
+assert_false($link->exists());
 ```
 
-> **Note**
-> For more information on the `Path` class, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/path-class)
+## exists
 
-The `Symlink` class resolves the given string by using the `Resolver\realpath` function.
+### Signature
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
-
-$symlink = Symlink::from_string('/root/home/user/../project/symlink');
-echo $symlink; // Output: '/root/home/project/symlink'
+function exists(string $path): bool
 ```
 
-> **Note**
-> For more information on the `Resolver` functions, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/resolver-functions)
+### Definition
 
-## Methods
+This function checks if the given path is a symbolic link. It returns a boolean value, `true` if the path is a symbolic link, `false` otherwise.
 
-Here you can see a list of the available methods on the `Symlink` class:
-
-### exists
-
-You can use the `exists` method to check if the given symlink exists on the filesystem.
+### Examples
 
 ```php
-public function exists(): bool
+use function PhpRepos\FileManager\Symlink\exists;
+
+$file = Path::from_string(root() . 'Tests/PlayGround/LinkSource');
+create($file, 'file content');
+$link = $file->parent()->append('symlink');
+assert_false(exists($link));
+
+link($file, $link);
+assert_true(exists($link));
 ```
 
-#### Example
+## link
+
+### Signature
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
-
-$symlink = Symlink::from_string('/home/user/symlink');
-
-echo (int) $symlink->exists(); // Output: 1
-echo (int) $symlink->delete()->exists(); // Output: 0
+function link(string $source_path, string $link_path): bool
 ```
 
-### leaf
+### Definition
 
-You can use the `leaf` method to get the leaf of the symlink which is the filename of the symlink.
+This function creates a symbolic link at the specified link_path, pointing to the specified source_path. 
+It returns a boolean value, `true` on success and `false` on failure.
+
+### Examples
 
 ```php
-public function leaf(): string
+use function PhpRepos\FileManager\Symlink\link;
+
+$file = Path::from_string(root() . 'Tests/PlayGround/LinkSource');
+create($file, 'file content');
+$link = $file->parent()->append('symlink');
+assert_true(link($file, $link));
+assert_true($file->string() === readlink($link));
 ```
 
-#### Example
+## target
+
+### Signature
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
-
-echo Path::from_string('/home/user/project')->leaf(); // Output: 'project'
-echo Path::from_string('/home/user/project/filename.txt')->leaf(); // Output: 'filename.txt' 
+function target(string $path): string
 ```
 
-### parent
+### Definition
 
-The `parent` method returns an instance of the `Directory` class from the current path's parent directory.
+This function returns the target of the symbolic link specified by path.
 
-> **Note**
-> For more information on the `Directory` class, please read [its documentation](https://saeghe.com/packages/file-manager/documentations/directory-class)
-
-```php
-public function parent(): Directory
-```
-
-#### Example
+### Examples
 
 ```php
-use Saeghe\FileManager\Filesystem\Symlink;
+use function PhpRepos\FileManager\Symlink\target;
 
-echo Path::from_string('/home/user/symlink')->parent(); // Output: '/home/user'
-echo Path::from_string('/home/user/project/symlink')->parent(); // Output: '/home/user/project' 
-```
-
-### relocate
-
-The `relocate` method returns a new `Path` instance by replacing the given origin with the given destination.
-
-```php
-public function relocate(string $origin, string $destination): Path
-```
-
-#### Example
-
-```php
-use Saeghe\FileManager\Filesystem\Symlink;
-
-$symlink = new Path('/home/user/directory/symlink');
-$relocate = $symlink->relocate('/home/user/directory', '/home/user2/directory/../another-directory');
-echo $relocate; // Output: '/home/user2/another-directory/symlink' 
-```
-
-### sibling
-
-The `sibling` method returns a new `Path` of the given path base on the path parent directory.
-
-```php
-public function sibling(string $symlink): Path
-```
-
-#### Example
-
-```php
-use Saeghe\FileManager\Filesystem\Symlink;
-
-$symlink = new Path('/home/user/directory/symlink');
-echo $sibling_directory = $symlink->sibling('subdirectory'); // Output: /home/user/directory/subdirectory
-echo $sibling_filename = $symlink->sibling('other-file.extension'); // Output: /home/user/directory/other-file.extension
-```
-
-### delete
-
-The `delete` deletes the symlink from the filesystem.
-
-```php
-public function delete(): self
-```
-
-#### Example
-
-```php
-use Saeghe\FileManager\Filesystem\Symlink;
-
-$symlink = new Path('/home/user/directory/symlink');
-echo (int) $symlink->exists(); // Output: 1
-$symlink->delete();
-echo (int) $symlink->exists(); // Output: 0
-```
-
-### exists
-
-The `exists` returns true if the symlink exists on the filesystem and is a link.
-Otherwise, it returns false.
-
-```php
-public function exists(): bool
-```
-
-#### Example
-
-```php
-use Saeghe\FileManager\Filesystem\Symlink;
-
-$symlink = new Path('/home/user/directory/symlink');
-echo (int) $symlink->exists(); // Output: 0
-$symlink->link(File::from_string('/home/user/file'));
-echo (int) $symlink->exists(); // Output: 1
-```
-
-### link
-
-The `link` method creates the symlink on the filesystem and links it to the given file.
-
-```php
-public function link(File $file): self
-```
-
-#### Example
-
-```php
-use Saeghe\FileManager\Filesystem\Symlink;
-
-$symlink = new Path('/home/user/directory/symlink');
-echo (int) $symlink->exists(); // Output: 0
-$symlink->link(File::from_string('/home/user/file'));
-echo (int) $symlink->exists(); // Output: 1
+$file = Path::from_string(root() . 'Tests/PlayGround/LinkSource');
+create($file, 'file content');
+$link = $file->parent()->append('symlink');
+link($file, $link);
+assert_true($file->string() === target($link));
 ```

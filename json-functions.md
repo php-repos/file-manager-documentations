@@ -1,6 +1,6 @@
 # Introduction
 
-The `Json` namespace is part of the FileManager package.
+The `Json` namespace is part of the `FileManager` package.
 Here you can see a list of included functions and their documentation.
 
 ## to_array

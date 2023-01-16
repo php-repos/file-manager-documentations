@@ -5,14 +5,14 @@ You can use it to keep any filename as a string.
 It also gives you access to an API that you can see in the following.
 
 > **Note**
-> For more information on the `Text` class, please read [its documentation](https://saeghe.com/packages/datatype/documentations/text-class)
+> For more information on the `Text` class, please read [its documentation](https://phpkg.com/packages/datatype/documentations/text-class)
 
 ## Usage
 
 You can pass the filename to the constructor:
 
 ```php
-use Saeghe\FileManager\Filesystem\Filename;
+use PhpRepos\FileManager\Filesystem\Filename;
 
 $filename = new Filename('filename');
 echo $filename; // Output: 'filename'
@@ -27,10 +27,12 @@ echo $filename->string(); // Output: '.filename'
 
 Here you can see a list of the available methods on the filename:
 
----
 ### directory
 
-It returns a Directory object by appending the filename to the given root directory.
+It returns a `Directory` object by appending the filename to the given root directory.
+
+> **Note**
+> For more information on the `Directory` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/directory-class)
 
 ```php
 public function directory(Directory $root): Directory
@@ -45,10 +47,13 @@ $result = $filename->directory(Directory::from_string('/home/user'));
 assert_true($result instanceof Directory);
 assert_true('/home/user/subdirectory' === $result->path->string());
 ```
----
+
 ### file
 
-It returns a File object by appending the filename to the given root directory.
+It returns a `File` object by appending the filename to the given root directory.
+
+> **Note**
+> For more information on the `File` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/file-class)
 
 ```php
 public function file(Directory $root): File
@@ -63,10 +68,13 @@ $result = $filename->file(Directory::from_string('/home/user'));
 assert_true($result instanceof File);
 assert_true('/home/user/filename' === $result->path->string());
 ```
----
+
 ### symlink
 
-It returns a Symlink object by appending the filename to the given root directory.
+It returns a `Symlink` object by appending the filename to the given root directory.
+
+> **Note**
+> For more information on the `Symlink` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/symlink-class)
 
 ```php
 public function symlink(Directory $root): Symlink
@@ -81,4 +89,3 @@ $result = $filename->symlink(Directory::from_string('/home/user'));
 assert_true($result instanceof Symlink);
 assert_true('/home/user/symlink' === $result->path->string());
 ```
----

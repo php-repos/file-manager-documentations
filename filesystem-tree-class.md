@@ -5,7 +5,7 @@ You can use it to keep a filesystem tree.
 It also gives you access to an API that you can see in the following.
 
 > **Note**
-> For more information on the `Tree` class, please read [its documentation](https://saeghe.com/packages/datatype/documentations/tree-class)
+> For more information on the `Tree` class, please read [its documentation](https://phpkg.com/packages/datatype/documentations/tree-class)
 
 ## Usage
 
@@ -13,8 +13,8 @@ You can use the `recursively` method on the `Directory` class to get a `Filesyst
 or use the constructor and make it by yourself.
 
 ```php
-use Saeghe\FileManager\Filesystem\Directory;
-use Saeghe\FileManager\Filesystem\FilesystemTree;
+use PhpRepos\FileManager\Filesystem\Directory;
+use PhpRepos\FileManager\Filesystem\FilesystemTree;
 
 $directory = Directory::from_string(root() . 'PlayGround');
 $directory->file('.hidden')->create('');
@@ -73,7 +73,6 @@ assert_true([
 
 Here you can see a list of the available methods on the filesystem tree:
 
----
 ### files
 
 It returns a collection of files in the tree, recursively, contains the hidden files.
@@ -107,4 +106,3 @@ assert_true([
     $document_file
 ] == $tree->files()->items());
 ```
----
