@@ -165,22 +165,30 @@ echo (int) is_empty('/root/home/user/project/directory/sub-directory'); // Outpu
 ### Signature
 
 ```php
-function ls(string $path): bool
+function ls(string $path): FilesystemCollection
 ```
 
 ### Definition
 
-It returns a list of directory contents.
+It returns a path list of directory contents.
 It excludes hidden contents.
-It equals to `ls your-directory`.
 
 ### Examples
 
 ```php
 use function PhpRepos\FileManager\Directory\ls;
 
-ls('/root/home/user/project/directory'); // ['sub-directory'] 
-ls('/root/home/user/project/directory/sub-directory'); // []  
+$directory = Path::from_string(root() . 'Tests/PlayGround/Directory');
+Directory\make($directory);
+Directory\make($directory->append('sub-directory'));
+File\create($directory->append('sample.txt'), '');
+File\create($directory->append('.hidden.txt'), '');
+assert_true(
+    [
+        $directory->append('sample.txt'),
+        $directory->append('sub-directory'),
+    ] == Directory\ls($directory)->items()
+);
 ```
 
 ## ls_all
@@ -188,21 +196,83 @@ ls('/root/home/user/project/directory/sub-directory'); // []
 ### Signature
 
 ```php
-function ls_all(string $path): bool
+function ls_all(string $path): FilesystemCollection
 ```
 
 ### Definition
 
-It returns a list of directory contents, including the hidden ones.
-It equals to `ls -a your-directory`.
+It returns a path list of directory contents, including the hidden ones.
 
 ### Examples
 
 ```php
 use function PhpRepos\FileManager\Directory\ls_all;
 
-ls_all('/root/home/user/project/directory'); // ['sub-directory', '.git'] 
-ls_all('/root/home/user/project/directory/sub-directory'); // ['.gitignore']  
+$directory = Path::from_string(root() . 'Tests/PlayGround/Directory');
+Directory\make($directory);
+Directory\make($directory->append('sub-directory'));
+File\create($directory->append('sample.txt'), '');
+File\create($directory->append('.hidden.txt'), '');  
+assert_true(
+    [
+        $directory->append('.hidden.txt'),
+        $directory->append('sample.txt'),
+        $directory->append('sub-directory'),
+    ] == Directory\ls_all($directory)->items()
+);
+```
+
+## ls_recursively
+
+### Signature
+
+```php
+function ls_recursively(string $path): FilesystemTree
+```
+
+### Definition
+
+It returns a filesystem tree of directory contents, recursively, including the hidden ones.
+
+### Examples
+
+```php
+use function PhpRepos\FileManager\Directory\ls_all;
+
+$playground = Path::from_string(root() . 'Tests/PlayGround');
+Directory\make($directory = $playground->append('directory'));
+Directory\make($subdirectory = $playground->append('directory/subdirectory'));
+File\create($file1 = $playground->append('directory/file1.txt'), '');
+Symlink\link($symlink = $playground->append('directory/file1.txt'), $playground->append('directory/symlink'));
+File\create($file2 = $playground->append('directory/subdirectory/file2.txt'), '');
+File\create($file3 = $playground->append('directory/subdirectory/file3.txt'), '');
+Directory\make($hidden_directory = $playground->append('directory/subdirectory/.hidden_directory'));
+File\create($hidden_file = $playground->append('directory/subdirectory/.hidden_directory/.hidden_file'), '');
+
+assert_true(
+    [
+        $directory,
+        $file1,
+        $subdirectory,
+        $hidden_directory,
+        $hidden_file,
+        $file2,
+        $file3,
+        $symlink,
+    ] == $tree->vertices()->items()
+);
+
+assert_true(
+    [
+        new Pair($directory, $file1),
+        new Pair($directory, $subdirectory),
+        new Pair($subdirectory, $hidden_directory),
+        new Pair($hidden_directory, $hidden_file),
+        new Pair($subdirectory, $file2),
+        new Pair($subdirectory, $file3),
+        new Pair($directory, $symlink),
+    ] == $tree->edges()->items()
+);  
 ```
 
 ## make
