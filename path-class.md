@@ -61,32 +61,13 @@ $resolved_path = $path->append('projects/awesome-project/subdirectory/../filenam
 echo $resolved_path; // Output: /home/user/projects/awesome-project/filename.txt
 ```
 
-### exists
-
-You can use the `exists` method to check if the given path exists on the filesystem.
-
-```php
-public function exists(): bool
-```
-
-#### Example
-
-```php
-use PhpRepos\FileManager\Path;
-
-$path = Path::from_string('/home/user');
-
-echo (int) $path->exists(); // Output: 1
-echo (int) $path->append('not-exists')->exists(); // Output: 0
-```
-
 ### leaf
 
 You can use the `leaf` method to get the leaf of the path.
 If the path is the root, it will return the root.
 
 ```php
-public function leaf(): string
+public function leaf(): Filename
 ```
 
 #### Example
@@ -94,20 +75,17 @@ public function leaf(): string
 ```php
 use PhpRepos\FileManager\Path;
 
-echo Path::from_string('/')->leaf(); // Output: '/'
-echo Path::from_string('/home/user/project')->leaf(); // Output: 'project'
-echo Path::from_string('/home/user/project/filename.txt')->leaf(); // Output: 'filename.txt' 
+echo Path::from_string('/')->leaf()->string(); // Output: '/'
+echo Path::from_string('/home/user/project')->leaf()->string(); // Output: 'project'
+echo Path::from_string('/home/user/project/filename.txt')->leaf()->string(); // Output: 'filename.txt' 
 ```
 
 ### parent
 
 The `parent` method returns an instance of the `Directory` class from the current path's parent directory.
 
-> **Note**
-> For more information on the `Directory` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/directory-class)
-
 ```php
-public function parent(): Directory
+public function parent(): Path
 ```
 
 #### Example
@@ -153,73 +131,4 @@ use PhpRepos\FileManager\Path;
 $path = new Path('/home/user/directory/filename');
 echo $sibling_directory = $path->sibling('subdirectory'); // Output: /home/user/directory/subdirectory
 echo $sibling_filename = $path->sibling('other-file.extension'); // Output: /home/user/directory/other-file.extension
-```
-
-### as_file
-
-The `as_file` method returns a new `File` instance of the path.
-
-> **Note**
-> For more information on the `File` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/file-class)
-
-```php
-public function as_file(): File
-```
-
-#### Example
-
-```php
-use PhpRepos\FileManager\Path;
-
-$path = new Path('/home/user/directory/filename');
-$file = $path->as_file();
-
-echo (int) $file instanceof File; // Output: 1
-echo $file; // Output: '/home/user/directory/filename'
-```
-
-### as_directory
-
-The `as_directory` method returns a new `Directory` instance of the path.
-
-> **Note**
-> For more information on the `Directory` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/directory-class)
-
-```php
-public function as_directory(): Directory
-```
-
-#### Example
-
-```php
-use PhpRepos\FileManager\Path;
-
-$path = new Path('/home/user/directory/subdirectory');
-$subdirectory = $path->as_directory();
-
-echo (int) $subdirectory instanceof Directory; // Output: 1
-echo $subdirectory; // Output: '/home/user/directory/subdirectory'
-```
-
-### as_symlink
-
-The `as_symlink` method returns a new `Symlink` instance of the path.
-
-> **Note**
-> For more information on the `Symlink` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/symlink-class)
-
-```php
-public function as_symlink(): Symlink
-```
-
-#### Example
-
-```php
-use PhpRepos\FileManager\Path;
-
-$path = new Path('/home/user/directory/symlink');
-$symlink = $path->as_symlink();
-
-echo (int) $symlink instanceof Symlink; // Output: 1
-echo $symlink; // Output: '/home/user/directory/symlink'
 ```

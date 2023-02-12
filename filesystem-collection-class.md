@@ -1,7 +1,7 @@
 # Introduction
 
 The `FilesystemCollection` class extends the `Collection` datatype class.
-If you use the `ls` or `ls_all` methods on a `Directory` object, the return type will be a `FilesystemCollection`.
+If you use the `ls` or `ls_all` functions on a `Directory` namespace, the return type will be a `FilesystemCollection`.
 It also gives you access to an API that you can see in the following.
 
 > **Note**
@@ -12,31 +12,33 @@ It also gives you access to an API that you can see in the following.
 You can use the constructor to make a new `FilesystemCollection`.
 
 ```php
-use PhpRepos\FileManager\Filesystem\FilesystemCollection;
+use PhpRepos\FileManager\FilesystemCollection;
 
-$directory = Directory::from_string('/home/user');
-$file = File::from_string('/home/user/file');
-$symlink = Symlink::from_string('/home/user/symlink');
+$directory = Path::from_string('/home/user');
+$file = Path::from_string('/home/user/file');
+$symlink = Path::from_string('/home/user/symlink');
 
 $collection = new FilesystemCollection([$directory, $file, $symlink]);
 $collection->put($new_file);
 $collection->push($other_file)->push($new_symlink);
-$files = $collection->filter(function (Directory|File|Symlink $item) {
-    return $item instanceof File;
+$files = $collection->filter(function (Path $item) {
+    return File\exists($item);
 });
 ```
 
-When you use the `ls` or `ls_all` methods on the `Directory` class, the return type is a `FilesystemCollection`:
+When you use the `ls` or `ls_all` functions on the `Directory` namespace, the return type is a `FilesystemCollection`:
 
 > **Note**
-> For more information on the `Directory` class, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/directory-class)
+> For more information on the `Directory` namespace, please read [its documentation](https://phpkg.com/packages/file-manager/documentations/directory-functions)
 
 ```php
-use PhpRepos\FileManager\Filesystem\FilesystemCollection;
-use PhpRepos\FileManager\Filesystem\Directory;
+use PhpRepos\FileManager\FilesystemCollection;
+use PhpRepos\FileManager\Path;
+use function PhpRepos\FileManager\Directory\ls;
+use function PhpRepos\FileManager\Directory\ls_all;
 
-$directory = Directory::from_string('/home/user');
+$directory = Path::from_string('/home/user');
 
-$collection = $directory->ls();
-$collection = $directory->ls_all();
+$collection = ls($directory);
+$collection = ls_all($directory);
 ```
